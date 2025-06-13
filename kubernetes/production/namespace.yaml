@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: arkfoundry-production
+  labels:
+    app.kubernetes.io/name: arkfoundry
+    app.kubernetes.io/instance: arkfoundry-production
+    app.kubernetes.io/version: "1.7"
+    app.kubernetes.io/component: platform-core
+    app.kubernetes.io/part-of: arkfoundry-sovereign-ai-platform
+    environment: production
+    arkfoundry.ai/tier: backend-services
+    arkfoundry.ai/managed-by: platform-engineering-team
+  annotations:
+    arkfoundry.ai/description: "Production namespace for all core backend services of the ArkFoundry Sovereign AI Platform v1.7."
+    arkfoundry.ai/contact-point: "Platform Operations <ops@arkfoundry.ai>"
+    arkfoundry.ai/data-sensitivity: "High - Contains production user data and operational systems."
+    # Example annotation for linking to documentation or runbooks:
+    # arkfoundry.ai/runbook-url: "https://confluence.arkfoundry.ai/x/ABCDEF"
+    # Example for cost allocation:
+    # arkfoundry.ai/cost-center: "CC-PROD-CORE"
+    # Consider adding annotations for specific tools if used, e.g.:
+    # linkerd.io/inject: enabled # If Linkerd service mesh is used and auto-injection is desired
+    # prometheus.io/scrape: "true" # If default scraping behavior for Prometheus is desired for this namespace
+    # fluentd.io/exclude: "false" # If fluentd is used for logging
