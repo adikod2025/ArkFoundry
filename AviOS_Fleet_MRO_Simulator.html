@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fleet MRO Simulator — Architecture & Build Spec</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: {
+    primaryColor: '#0A1628', primaryTextColor: '#ffffff',
+    primaryBorderColor: '#00D4FF', lineColor: '#00D4FF',
+    fontFamily: 'Segoe UI, Helvetica, Arial, sans-serif'
+  }});
+</script>
+<style>
+  :root { --navy:#0A1628; --accent:#00D4FF; --ink:#16302B; --muted:#5b6b7a; }
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; color:#1a2530;
+         line-height:1.55; max-width:900px; margin:0 auto; padding:48px 40px; }
+  h1 { color:var(--navy); font-size:26px; margin:0 0 4px; }
+  h2 { color:var(--navy); font-size:19px; margin:34px 0 10px;
+       padding-bottom:6px; border-bottom:2px solid var(--accent); }
+  h3 { color:var(--navy); font-size:15px; margin:20px 0 6px; }
+  .subtitle { color:var(--muted); font-size:14px; margin:0 0 2px; }
+  .meta { color:var(--muted); font-size:12px; margin:0 0 8px; }
+  .callout { background:#f2f8fb; border-left:4px solid var(--accent);
+             padding:12px 16px; margin:14px 0; font-size:14px; border-radius:3px; }
+  .warn { background:#fff6f2; border-left:4px solid #ff7a59; }
+  table { width:100%; border-collapse:collapse; margin:14px 0; font-size:13px; }
+  th { background:var(--navy); color:#fff; text-align:left; padding:8px 10px; }
+  td { border:1px solid #d8e0e6; padding:8px 10px; vertical-align:top; }
+  tr:nth-child(even) td { background:#f7fafc; }
+  code, pre { font-family:'SF Mono', Consolas, monospace; }
+  pre { background:var(--navy); color:#e6f6fb; padding:16px; border-radius:5px;
+        font-size:12px; overflow-x:auto; line-height:1.45; }
+  code { background:#eef3f6; color:var(--ink); padding:1px 5px; border-radius:3px; font-size:12px; }
+  .diagram { text-align:center; margin:18px 0; }
+  ul { margin:8px 0; padding-left:22px; } li { margin:4px 0; }
+  .tag { display:inline-block; background:var(--accent); color:var(--navy);
+         font-size:11px; font-weight:600; padding:2px 8px; border-radius:10px; }
+  @media print {
+    body { padding:0 12px; max-width:none; }
+    h2 { page-break-after:avoid; } table, pre, .callout { page-break-inside:avoid; }
+    .diagram { page-break-inside:avoid; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Fleet MRO Simulator — Closed-Loop Architecture &amp; Build Spec</h1>
+<p class="subtitle">Synthetic training-data generator for AviOS predictive models</p>
+<p class="meta"><span class="tag">SIMULATOR — NOT A DIGITAL TWIN</span> &nbsp; Status: design spec &nbsp;·&nbsp; Output target: AviOS 52-entity model</p>
+
+<h2>1. Purpose &amp; Boundary (read first)</h2>
+<p>This system generates <strong>synthetic fleet histories</strong> to harden the AviOS platform end-to-end and to <strong>pre-train</strong> predictive models before fine-tuning on real operator data. It is a <strong>simulator</strong>, not a digital twin: it produces plausible, correctly-labelled data, not a physically-accurate mirror of a specific tail.</p>
+<div class="callout"><strong>Valid for:</strong> platform/stub hardening, workflow stress-testing, model pre-training, demo data.</div>
+<div class="callout warn"><strong>NOT valid for:</strong> accuracy evidence in front of buyers or investors. Synthetic accuracy proves the simulator, not the product. Real predictive validation still requires an operator's historical data — that remains the critical path.</div>
+
+<h2>2. Architecture</h2>
+<div class="diagram">
+<pre class="mermaid">
+flowchart TB
+    CFG["CONFIG / SEED BLOCK
+    fleet size · tail types · utilisation
+    sim horizon · random seed (reproducible)"]
+    subgraph CORE["FLEET STATE ENGINE (causal centre)"]
+        FSE["Per aircraft + per component:
+        true health / degradation index
+        flight hours · cycles · time since check
+        installed part serial + life-limit remaining
+        open defects"]
+    end
+    subgraph L1["LAYER 1 — INPUT DATA & SENSOR TELEMETRY"]
+        T1["Synthetic (C-MAPSS-style)
+        EGT · fan speed · vibration
+        ⟵ generated FROM true health + noise"]
+        T2["Real FDR/QAR streams"]
+        T3["Annotated logs (NGAFID-style)"]
+    end
+    subgraph L2["LAYER 2 — FAILURE MODELS & EVENT GENERATORS"]
+        F1["Prognostic / RUL engine"]
+        F2["Statistical failure rates
+        calibrated to real base rates + class imbalance"]
+        F3["Unscheduled events (ADs, lightning)"]
+        GT["GROUND-TRUTH LABEL STORE
+        true RUL + true failure mode
+        (held out at inference)"]
+    end
+    subgraph L3["LAYER 3 — MRO OPERATIONAL LOGIC & WORKFLOWS"]
+        O1["Task-card engine"]
+        O2["Repair-queue DES — FINITE resources:
+        hangar bays · certified techs by shift · parts-on-hand"]
+        O3["Maintenance logic (MSG-3)"]
+    end
+    subgraph L4["LAYER 4 — STRUCTURAL STANDARDS & DOMAIN KNOWLEDGE"]
+        S1["ATA Spec 100/2200 codes"]
+        S2["Interchangeability & lead times (BOM)"]
+        S3["Regulatory rules (EASA/FAA Part 145/43)"]
+    end
+    OUT["OUTPUT RECORDS → AviOS
+    Aircraft · Component(serial,life-limit)
+    · MaintenanceEvent · Defect"]
+    VAL["CALIBRATION / VALIDATION
+    emergent rates vs published real base rates (SDRS)"]
+    CFG --> FSE
+    FSE -->|"true health drives sensors"| T1
+    T2 --> F1
+    T3 --> F1
+    T1 --> F1
+    F1 --> F2 --> F3
+    F2 --> GT
+    F3 -->|"failure events"| O3
+    O3 --> O1 --> O2
+    S2 -->|"parts lead-time"| O2
+    S1 --> O3
+    S3 --> O3
+    O2 -->|"action: part replaced →
+    health restored, life-limit reset"| FSE
+    FSE --> OUT
+    F2 -.->|emergent rates| VAL
+    GT -.-> VAL
+</pre>
+</div>
+
+<h2>3. Improvements Applied (vs the original 4-layer diagram)</h2>
+<table>
+<tr><th>#</th><th>Change</th><th>Why it's required</th></tr>
+<tr><td>1</td><td>Added <strong>Fleet State Engine</strong> as causal centre owning per-component health over time</td><td>Original had nowhere to hold evolving condition — four static layers, not a simulation</td></tr>
+<tr><td>2</td><td><strong>Closed the loop</strong> via a time-step tick; maintenance actions write back to state</td><td>One-way arrows produce datasets; the loop produces a fleet you can run forward</td></tr>
+<tr><td>3</td><td><strong>Telemetry generated from true health + noise</strong> (arrow Engine → Layer 1)</td><td>Otherwise the model reads sensors with no causal link to the labels — confident, useless</td></tr>
+<tr><td>4</td><td>Added <strong>Ground-Truth Label Store</strong> + calibrated failure rates</td><td>What you train and score against; uncalibrated rates train a confidently-wrong model</td></tr>
+<tr><td>5</td><td>Layer 3 DES given <strong>finite resources</strong> (bays, techs, parts)</td><td>AOG duration — what AviOS prevents — only emerges under constraint</td></tr>
+<tr><td>6</td><td>Added arrow <strong>Layer 4 → Layer 3</strong> (parts lead-time into repair queue)</td><td>Lead-time directly drives how long a repair/AOG lasts</td></tr>
+<tr><td>7</td><td>Added <strong>Config/Seed</strong> block and <strong>Calibration/Validation</strong> output</td><td>Reproducibility + honesty check vs real base rates</td></tr>
+<tr><td>8</td><td><strong>Renamed to "Simulator,"</strong> removed "digital twin," labelled output "synthetic — not evidence"</td><td>Keeps you consistent and un-embarrassable before a sophisticated buyer</td></tr>
+</table>
+<div class="callout"><strong>Kept as-is (these were right):</strong> all of Layer 4 standards grounding; the three-way data-source split in Layer 1; MSG-3 logic in Layer 3.</div>
+
+<h2>4. Block-by-Block Spec</h2>
+<h3>Config / Seed</h3>
+<p>Owns fleet size, tail types &amp; mix, utilisation rate, sim horizon, RNG seed. Emits the run definition. Guarantees identical seed → identical run.</p>
+<h3>Fleet State Engine (core)</h3>
+<p>Owns per-component true health index, hours, cycles, time-since-check, installed part serial + life-limit remaining, open defects. Reads maintenance actions from L3; writes true health into L1 and output records to the sink. The only source of truth for what is actually happening to each tail.</p>
+<h3>Layer 1 — Telemetry</h3>
+<p>Input: true health from the Engine. Emits sensor streams where a degrading component produces drifting signals (EGT/vibration rising as health falls), plus noise. Real FDR/QAR and annotated logs blend in for realism and to anchor the synthetic distribution.</p>
+<h3>Layer 2 — Failure Models</h3>
+<p>Input: telemetry + true health. Emits failure events and the <strong>held-out</strong> true RUL / failure mode to the Label Store. Failure rates must be <strong>calibrated to real base rates and class imbalance</strong> — wide-body fleets produce very few failures per component type; over-seeding teaches a world that doesn't exist.</p>
+<h3>Layer 3 — MRO Operational Logic</h3>
+<p>Input: failure events + Layer 4 lead-times. Runs task-card procedures and a discrete-event repair queue over <strong>finite</strong> hangar bays, shift-limited techs, and parts-on-hand. Emits a maintenance action with realistic duration, including AOG waits when parts are out. MSG-3 governs scheduled vs reactive.</p>
+<h3>Layer 4 — Standards &amp; Domain</h3>
+<p>Provides ATA chapter taxonomy (components typed the way AviOS types them), interchangeability/BOM + supply lead-times, and Part 145/43 rules. Feeds Layer 3.</p>
+<h3>Calibration / Validation</h3>
+<p>Compares the simulator's emergent failure distribution against published real base rates (e.g. SDRS). Outputs a divergence report you can later cite as "synthetic distribution matches real within X%."</p>
+
+<h2>5. The Tick Loop</h2>
+<pre>for tick in range(horizon):            # one tick = one flight or one day
+    for tail in fleet:
+        state = FleetStateEngine.get(tail)
+        telemetry = Layer1.emit(state.true_health, noise)
+        events, truth = Layer2.evaluate(telemetry, state.true_health)
+        LabelStore.write(tail, tick, truth)          # held out from model
+        if events:
+            action = Layer3.plan(events,
+                                 parts_leadtime=Layer4.leadtime,
+                                 resources=fleet_resources)   # finite
+            FleetStateEngine.apply(tail, action)     # <- closes the loop
+        Output.write(records_for(tail, tick))        # AviOS-keyed
+    fleet_resources.advance_shift()
+Calibration.compare(emergent_rates=Output, real_rates=SDRS_baseline)</pre>
+
+<h2>6. Output Schema — Must Line Up with AviOS</h2>
+<table>
+<tr><th>AviOS entity</th><th>Simulator emits</th></tr>
+<tr><td><strong>Aircraft</strong></td><td>tail id, type, cumulative hours/cycles, status</td></tr>
+<tr><td><strong>Component</strong> (serial + life-limit)</td><td>installed serial, ATA chapter, life-limit remaining, true health (Label Store only)</td></tr>
+<tr><td><strong>MaintenanceEvent</strong></td><td>action type, MSG-3 driver, start/end, AOG duration, parts consumed</td></tr>
+<tr><td><strong>Defect</strong></td><td>failure mode, detected-at, severity, resolved-by event</td></tr>
+<tr><td><em>(held out)</em> <strong>Label Store</strong></td><td>true RUL, true failure mode — never an input at inference</td></tr>
+</table>
+
+<h2>7. Two Cautions to Design in From Day One</h2>
+<div class="callout warn"><strong>Data provenance / licensing.</strong> C-MAPSS is turbofan-degradation only (no hydraulics/avionics/airframe). Verify current licensing/terms for C-MAPSS, NGAFID and FAA SDRS before this sits under a commercial product — "public dataset" ≠ "free for commercial use."</div>
+<div class="callout warn"><strong>Label integrity is the whole ballgame.</strong> The models are only as good as Layer 2's labels. Miscalibrated base rates → a confident, wrong model, which in a safety-adjacent sale is worse than no model.</div>
+
+<p style="margin-top:30px; color:var(--muted); font-size:12px; border-top:1px solid #d8e0e6; padding-top:12px;">
+This simulator strengthens the platform and pre-training. It does not shorten the critical path, which remains one operator's real historical data to move prediction precision from target to observed.</p>
+
+</body>
+</html>
