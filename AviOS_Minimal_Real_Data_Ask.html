@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minimal Real-Data Ask — Operator Extract Spec</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: {
+    primaryColor: '#0A1628', primaryTextColor: '#ffffff',
+    primaryBorderColor: '#00D4FF', lineColor: '#00D4FF',
+    fontFamily: 'Segoe UI, Helvetica, Arial, sans-serif'
+  }});
+</script>
+<style>
+  :root { --navy:#0A1628; --accent:#00D4FF; --ink:#16302B; --muted:#5b6b7a; }
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; color:#1a2530;
+         line-height:1.55; max-width:900px; margin:0 auto; padding:48px 40px; }
+  h1 { color:var(--navy); font-size:26px; margin:0 0 4px; }
+  h2 { color:var(--navy); font-size:19px; margin:34px 0 10px;
+       padding-bottom:6px; border-bottom:2px solid var(--accent); }
+  h3 { color:var(--navy); font-size:15px; margin:20px 0 6px; }
+  .subtitle { color:var(--muted); font-size:14px; margin:0 0 2px; }
+  .meta { color:var(--muted); font-size:12px; margin:0 0 8px; }
+  .callout { background:#f2f8fb; border-left:4px solid var(--accent);
+             padding:12px 16px; margin:14px 0; font-size:14px; border-radius:3px; }
+  .warn { background:#fff6f2; border-left:4px solid #ff7a59; }
+  table { width:100%; border-collapse:collapse; margin:14px 0; font-size:13px; }
+  th { background:var(--navy); color:#fff; text-align:left; padding:8px 10px; }
+  td { border:1px solid #d8e0e6; padding:8px 10px; vertical-align:top; }
+  tr:nth-child(even) td { background:#f7fafc; }
+  code, pre { font-family:'SF Mono', Consolas, monospace; }
+  pre { background:var(--navy); color:#e6f6fb; padding:16px; border-radius:5px;
+        font-size:12px; overflow-x:auto; line-height:1.45; }
+  code { background:#eef3f6; color:var(--ink); padding:1px 5px; border-radius:3px; font-size:12px; }
+  .diagram { text-align:center; margin:18px 0; }
+  ul { margin:8px 0; padding-left:22px; } li { margin:4px 0; }
+  .tag { display:inline-block; background:var(--accent); color:var(--navy);
+         font-size:11px; font-weight:600; padding:2px 8px; border-radius:10px; }
+  @media print {
+    body { padding:0 12px; max-width:none; }
+    h2 { page-break-after:avoid; } table, pre, .callout { page-break-inside:avoid; }
+    .diagram { page-break-inside:avoid; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Minimal Real-Data Ask — Operator Extract Spec</h1>
+<p class="subtitle">The smallest anonymised dataset that lets AviOS move prediction precision from target to observed</p>
+<p class="meta"><span class="tag">COMPANION TO: FLEET MRO SIMULATOR SPEC</span> &nbsp; Status: pilot-engagement spec &nbsp;·&nbsp; Audience: first pilot operator (and your own negotiating position)</p>
+
+<h2>1. Why This Document Exists</h2>
+<p>The simulator hardens the platform and pre-trains the models, but it cannot produce a defensible accuracy number — synthetic accuracy proves the simulator, not the product. One operator's historical maintenance data is the critical path to an <strong>observed</strong> precision figure. This spec defines the smallest extract that gets there, so the ask is a one-day export job for the operator's MIS admin, not a data-integration project their IT department will veto.</p>
+<div class="callout"><strong>Design principle:</strong> every field requested must either (a) feed fine-tuning, or (b) feed the validation protocol in §6. Anything that does neither is out — a smaller ask clears legal review faster than a better-argued big one.</div>
+
+<h2>2. The Exchange at a Glance</h2>
+<div class="diagram">
+<pre class="mermaid">
+flowchart LR
+    subgraph OP["OPERATOR"]
+        MIS["MIS export
+        (AMOS / TRAX / OASES)
+        ~1 day DBA effort"]
+        ANON["Anonymisation pass
+        (script provided by us,
+        run on THEIR side)"]
+    end
+    subgraph US["AVIOS — ISOLATED ENVIRONMENT"]
+        FT["Fine-tune
+        (train window)"]
+        VAL["Temporal holdout
+        validation (final year)"]
+        RPT["Validation report
+        observed precision / recall"]
+    end
+    RET["OPERATOR RECEIVES
+    fleet reliability insight report
+    + pilot pricing"]
+    MIS --> ANON -->|"NDA + DPA
+    encrypted transfer"| FT --> VAL --> RPT --> RET
+</pre>
+</div>
+<p>The anonymisation script runs <strong>on the operator's side</strong> before anything leaves their network — this single fact does more to unblock the deal than any clause in the DPA.</p>
+
+<h2>3. Scope — What "Minimal" Means</h2>
+<table>
+<tr><th>Dimension</th><th>Minimum</th><th>Why this floor</th></tr>
+<tr><td><strong>Fleet</strong></td><td>One homogeneous sub-fleet, ≥10 tails, same type/series</td><td>Mixed types fragment the failure statistics; homogeneity buys signal per tail</td></tr>
+<tr><td><strong>History</strong></td><td>≥3 years, contiguous, ending as recently as possible</td><td>Needs ≥2 years to train + 1 full year held out (§6); seasonality requires whole years</td></tr>
+<tr><td><strong>Event density</strong></td><td>≥30–50 unscheduled removals <em>per ATA chapter you intend to validate</em></td><td>Below ~30 events, precision/recall have confidence intervals too wide to cite</td></tr>
+<tr><td><strong>Fallback</strong></td><td>If a chapter is under-dense, validate at system level (2-digit ATA), not component level</td><td>An honest coarse claim beats an unstable fine-grained one</td></tr>
+</table>
+
+<h2>4. The Extract — Five Tables</h2>
+<p>Everything below is a standard export from AMOS, TRAX, or OASES. CSV or Parquet; one file per table; UTF-8; a data dictionary sheet listing any operator-specific codes.</p>
+<h3>4.1 Fleet &amp; Utilisation <span class="tag">REQUIRED</span></h3>
+<p>One row per tail per month: <code>tail_token · aircraft_type · series · month · flight_hours · flight_cycles</code>. Anchors every model to exposure — failures per hour, not raw counts.</p>
+<h3>4.2 Maintenance Events <span class="tag">REQUIRED</span></h3>
+<p>Work orders / task cards: <code>event_id · tail_token · ata_chapter · event_type (scheduled | unscheduled | AOG) · start_ts · end_ts · description_scrubbed · parts_consumed</code>. Maps 1:1 to the AviOS <strong>MaintenanceEvent</strong> entity.</p>
+<h3>4.3 Component Removals &amp; Installs <span class="tag">REQUIRED</span></h3>
+<p><code>serial_token · pn_family · ata_chapter · position · tail_token · removal_ts · removal_reason (failed | scheduled | convenience) · tsn · csn</code>. This table <em>is</em> the label source: unscheduled removals with reason "failed" are the positive class the models must predict. Maps to the AviOS <strong>Component</strong> entity.</p>
+<h3>4.4 Defects / PIREPs / MEL Items <span class="tag">REQUIRED</span></h3>
+<p><code>defect_id · tail_token · ata_chapter · reported_ts · mel_category · symptom_text_scrubbed · resolved_by_event_id</code>. The leading-indicator stream — recurring defects preceding a removal are exactly the pattern worth learning. Maps to the AviOS <strong>Defect</strong> entity.</p>
+<h3>4.5 Optional Boosters <span class="tag">NICE-TO-HAVE</span></h3>
+<ul>
+<li><strong>Engine trend-monitoring summaries</strong> (EGT margin, vibration trend per flight or per week) — the strongest single booster for engine-chapter precision</li>
+<li><strong>Technical delay/cancellation codes</strong> — ties predictions to the cost story</li>
+<li><strong>AOG log with resolution timeline</strong> — calibrates the simulator's repair-queue DES against reality</li>
+</ul>
+<div class="callout"><strong>Explicitly NOT requested:</strong> raw full-flight QAR/FDR streams (huge, sensitive, unnecessary for this validation), crew or passenger data of any kind, commercial/financial data, safety-report (ASR/SMS) narratives. Saying this in the first meeting shortens legal review by weeks.</div>
+
+<h2>5. Anonymisation Rules — Privacy That Preserves Trainability</h2>
+<table>
+<tr><th>Field</th><th>Rule</th><th>What it preserves</th></tr>
+<tr><td>Tail numbers</td><td>Consistent pseudonym (<code>AC-001</code>…), same token everywhere</td><td>Per-aircraft history threads intact</td></tr>
+<tr><td>Part serials</td><td>Consistent hash-token per serial</td><td>Component life-tracking across removals/installs</td></tr>
+<tr><td>Part numbers</td><td>Keep family/ATA; hash exact PN consistently</td><td>Interchangeability groups without exposing vendor pricing tells</td></tr>
+<tr><td>Dates</td><td>Single fleet-wide constant offset (e.g. −7 to −90 days), same for all tables</td><td>All intervals, sequences and seasonality — the actual signal</td></tr>
+<tr><td>Free text</td><td>Strip names, employee IDs, airport codes; keep symptom vocabulary</td><td>"recurring EGT overtemp on climb" survives; who wrote it doesn't</td></tr>
+<tr><td>Operator identity</td><td>No IATA/ICAO codes, no station identifiers in any field</td><td>Extract is unattributable if leaked</td></tr>
+</table>
+<div class="callout warn"><strong>One rule that matters more than the rest:</strong> pseudonyms must be <em>consistent across all five tables</em>. A fresh token per table destroys the joins and with them the entire training value. The provided anonymisation script enforces this with a single mapping file that never leaves the operator.</div>
+
+<h2>6. Validation Protocol — How the Number Gets Produced</h2>
+<ul>
+<li><strong>Split:</strong> temporal, never random — train on years 1 to N−1, hold out the final full year. No event, defect, or removal from the holdout year touches training. Random splits leak future into past and inflate every metric; a sophisticated buyer will ask exactly this question.</li>
+<li><strong>Task:</strong> for each component/system in scope, predict an unscheduled failure-driven removal within a 30-day horizon.</li>
+<li><strong>Metrics reported:</strong> precision per alert · recall of actual failures · median advance warning (days) · false alerts per tail-month · all versus the baseline of the existing MSG-3 schedule alone.</li>
+<li><strong>Output:</strong> a validation report stating observed figures with confidence intervals. From that day forward, marketing claims cite <em>observed</em> precision — the target number retires.</li>
+</ul>
+<pre># Acceptance gate for citing a chapter publicly
+chapter_reportable = (
+    unscheduled_removals_in_holdout >= 10 and
+    precision_ci_width <= 0.15 and
+    recall >= baseline_msg3_recall          # must beat the schedule
+)</pre>
+
+<h2>7. Handling Terms (Offer These Before Being Asked)</h2>
+<ul>
+<li>NDA + Data Processing Agreement before any transfer; encrypted transfer; processing in an isolated single-tenant environment (their VPC if preferred).</li>
+<li>No third-party access, no co-mingling with other operators' data, no use beyond fine-tuning and this validation.</li>
+<li>Deletion on request and automatically at engagement end; deletion certificate provided.</li>
+<li>The operator reviews the validation report and approves any external citation of results — including anonymous ones — before first use.</li>
+</ul>
+
+<h2>8. What the Operator Gets</h2>
+<ul>
+<li><strong>Fleet reliability insight report:</strong> their own top recurring-defect chains, worst-actor tails, and removal-driver ranking — genuinely useful even if they never buy.</li>
+<li><strong>First-pilot pricing</strong> locked for a defined term.</li>
+<li>Named (or anonymous, their choice) position as the validation fleet in future material.</li>
+</ul>
+
+<p style="margin-top:30px; color:var(--muted); font-size:12px; border-top:1px solid #d8e0e6; padding-top:12px;">
+Sequence with the simulator spec: simulator hardens the platform and pre-trains the models now; this extract fine-tunes and produces the observed precision figure. Both documents assume the same AviOS entity model, so the pipeline that ingests synthetic records ingests this extract unchanged.</p>
+
+</body>
+</html>
