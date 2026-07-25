@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AviOS Research Library — Aviation MRO Literature &amp; Media</title>
+<style>
+  :root { --navy:#0A1628; --accent:#00D4FF; --ink:#16302B; --muted:#5b6b7a; }
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; color:#1a2530;
+         line-height:1.55; max-width:900px; margin:0 auto; padding:48px 40px; }
+  h1 { color:var(--navy); font-size:26px; margin:0 0 4px; }
+  h2 { color:var(--navy); font-size:19px; margin:34px 0 10px;
+       padding-bottom:6px; border-bottom:2px solid var(--accent); }
+  h3 { color:var(--navy); font-size:15px; margin:20px 0 6px; }
+  .subtitle { color:var(--muted); font-size:14px; margin:0 0 2px; }
+  .meta { color:var(--muted); font-size:12px; margin:0 0 8px; }
+  .callout { background:#f2f8fb; border-left:4px solid var(--accent);
+             padding:12px 16px; margin:14px 0; font-size:14px; border-radius:3px; }
+  .warn { background:#fff6f2; border-left:4px solid #ff7a59; }
+  table { width:100%; border-collapse:collapse; margin:14px 0; font-size:13px; }
+  th { background:var(--navy); color:#fff; text-align:left; padding:8px 10px; }
+  td { border:1px solid #d8e0e6; padding:8px 10px; vertical-align:top; }
+  tr:nth-child(even) td { background:#f7fafc; }
+  code { background:#eef3f6; color:var(--ink); padding:1px 5px; border-radius:3px;
+         font-family:'SF Mono', Consolas, monospace; font-size:12px; }
+  ul { margin:8px 0; padding-left:22px; } li { margin:4px 0; }
+  a { color:#0077a8; }
+  .tag { display:inline-block; background:var(--accent); color:var(--navy);
+         font-size:11px; font-weight:600; padding:2px 8px; border-radius:10px; }
+  .free { display:inline-block; background:#16a34a; color:#fff;
+          font-size:11px; font-weight:600; padding:2px 8px; border-radius:10px; }
+  .paid { display:inline-block; background:#5b6b7a; color:#fff;
+          font-size:11px; font-weight:600; padding:2px 8px; border-radius:10px; }
+  @media print {
+    body { padding:0 12px; max-width:none; }
+    h2 { page-break-after:avoid; } table, .callout { page-break-inside:avoid; }
+    a { color:#0077a8; text-decoration:none; }
+  }
+</style>
+</head>
+<body>
+
+<h1>AviOS Research Library — Aviation MRO Literature &amp; Media</h1>
+<p class="subtitle">Curated books, reports, journals, datasets and media — each mapped to what it validates in AviOS</p>
+<p class="meta"><span class="tag">COMPANION TO: SIMULATOR SPEC · REAL-DATA ASK SPEC</span> &nbsp; Status: research base &nbsp;·&nbsp; Selection date: July 2026</p>
+
+<h2>1. What This Library Is For — and Isn't</h2>
+<p>Every entry below earns its place by validating a specific AviOS design decision or market claim: the MSG-3 logic in Layer 3 of the simulator, the failure-rate calibration in Layer 2, the cost-of-AOG story in the pitch, the market-size number on the first slide. Sources that are merely "about aviation" are excluded.</p>
+<div class="callout warn"><strong>Honesty boundary, same as always:</strong> literature gives you <em>design validity</em> (your architecture matches how the industry actually works) and <em>market validity</em> (the spend and the pain are real and independently documented). It cannot give you <em>predictive validity</em> — that still comes only from the operator extract defined in the Real-Data Ask spec. "Certainty AviOS will revolutionize the market" is not available from any bookshelf; what is available is the evidence base that makes the thesis defensible in every meeting until the pilot data lands.</div>
+
+<h2>2. Tier 1 — The Spine (read these first)</h2>
+<h3>2.1 Aviation Maintenance Management — Kinnison &amp; Siddiqui <span class="paid">BOOK</span></h3>
+<p>McGraw-Hill, 2nd ed. The standard end-to-end text on how an airline M&amp;E organization actually runs: maintenance program structure, QA/QC, reliability programs, materiel, planning, and the org chart your buyers sit in. Kinnison spent 20 years at Boeing customer services. <strong>Validates:</strong> Layer 3 of the simulator (task cards, planning, reliability program feedback loop) and the entity model's fidelity to real M&amp;E departments — this book is effectively a map of your user personas.</p>
+<h3>2.2 Aircraft Maintenance Programs — David Lapesa Barrera <span class="paid">BOOK</span></h3>
+<p>Springer Series in Reliability Engineering, 2022. The first systematic EASA-vs-FAA comparison of maintenance program requirements, with full MSG-3 methodology and the accident history behind each rule. Written by the engineer who managed the A220 launch-operator AMP and the world's largest A380 fleet program. <strong>Validates:</strong> the MSG-3 engine and the Part-145/Part-M/Part 43 rules in Layer 4 — this is the single closest book to the simulator's Layers 3–4 and should be treated as their reference implementation.</p>
+<h3>2.3 Reliability-Centered Maintenance — Nowlan &amp; Heap (1978) <span class="free">FREE PDF</span></h3>
+<p>The United Airlines / DoD report that founded the entire field: why hard-time overhaul fails for most failure modes, the six failure patterns, and the logic that became MSG-3 and SAE JA1011. Freely available (<a href="https://reliabilitywebfiles.s3.amazonaws.com/Reliability+Centered+Maintenance+by+Nowlan+and+Heap.pdf">PDF mirror</a>). <strong>Validates:</strong> AviOS's core premise. The famous finding — only ~11% of failure modes are age-related, so scheduled overhaul can't prevent the other ~89% — is the 48-year-old academic argument for condition-based prediction. Cite it; sophisticated buyers know it.</p>
+<h3>2.4 IATA Maintenance Cost data eXchange (MCX) Executive Reports <span class="free">FREE (PUBLIC VERSION)</span></h3>
+<p>Annual benchmarking from 50+ airlines (~a quarter of world fleet): maintenance cost per flight hour, per ATA segment, labor vs material split. Public versions: <a href="https://www.iata.org/contentassets/bf8ca67c8bcd4358b3d004b0d6d0916f/fy2024-mcx-report_public.pdf">FY2024</a>, <a href="https://www.iata.org/contentassets/8437020db31a4717b70677d9b06b1a45/fy2023-mcx-report_public.pdf">FY2023</a>; program home at <a href="https://www.iata.org/mcx">iata.org/mcx</a>. <strong>Validates:</strong> every cost number in the AviOS ROI model, and the simulator's cost calibration. When a buyer challenges your savings math, this is the neutral referee.</p>
+<h3>2.5 Oliver Wyman Global Fleet &amp; MRO Market Forecast 2026–2036 <span class="free">FREE</span></h3>
+<p><a href="https://www.oliverwyman.com/our-expertise/insights/2026/feb/global-fleet-and-mro-market-forecast-2026-2036.html">The</a> annually-refreshed market sizing the whole industry quotes: ~30,000 aircraft in service growing to ~41,000 by 2036 (3.2% CAGR); MRO spend past $136B in 2025; average fleet age up to 13.4 years on OEM production shortfalls. Pair with IATA's estimate that supply-chain bottlenecks cost airlines $11B+ in 2025, $3.1B of it extra maintenance (<a href="https://www.iata.org/en/pressroom/2025-releases/2025-12-09-02/">IATA press release</a>) and <a href="https://arsa.org/market-assessment/">ARSA's annual market assessment</a>. <strong>Validates:</strong> the TAM slide and, more importantly, the timing argument — an aging, supply-constrained fleet is precisely the market where predicting failures and pre-positioning parts is worth the most.</p>
+
+<h2>3. Tier 2 — The Predictive Core</h2>
+<h3>3.1 The IVHM Series — Ian K. Jennions (ed.), SAE International <span class="paid">4 BOOKS</span></h3>
+<p>From Cranfield's IVHM Centre: <em>Perspectives on an Emerging Field</em>, <em>Business Case Theory and Practice</em>, <em>The Technology</em> (<a href="https://saemobilus.sae.org/books/integrated-vehicle-health-management-technology-r-429">R-429</a>), and <em>Implementation and Lessons Learned</em> (<a href="https://www.sae.org/publications/books/content/r-438">R-438</a>). The only book series covering exactly what AviOS is: health management integrated into maintenance operations, including why deployments fail. <strong>Validates:</strong> the whole product thesis. <em>Business Case</em> arms the CFO conversation; <em>Implementation and Lessons Learned</em> is a catalogue of the mistakes you get to skip.</p>
+<h3>3.2 Prognostics and Health Management of Engineering Systems — Kim, An &amp; Choi <span class="paid">BOOK</span></h3>
+<p>Springer, 2017. The standard graduate introduction to RUL estimation: physics-based vs data-driven methods, uncertainty quantification, algorithm selection — with MATLAB examples. <strong>Validates:</strong> Layer 2 of the simulator and the model architecture choices behind the AviOS prognostic engine, including how to report RUL with confidence bounds (which the validation protocol in the Real-Data Ask spec requires).</p>
+<h3>3.3 International Journal of PHM + PHM Society Proceedings <span class="free">OPEN ACCESS</span></h3>
+<p>The field's flagship journal (<a href="https://papers.phmsociety.org/index.php/ijphm">IJPHM</a>, ISSN 2153-2648) and the annual PHM Society / PHM Europe conference proceedings — all free. Directly relevant recent work includes PHM-driven spare-part inventory frameworks and system-dynamics analyses of PHM benefits to aircraft maintenance. <strong>Validates:</strong> keeps the failure models state-of-the-art, and the aerospace special issues are where your future validation paper belongs — publishing there is itself a credibility asset.</p>
+<h3>3.4 NASA Prognostics Center of Excellence Data Repository <span class="free">OPEN DATA</span></h3>
+<p><a href="https://www.nasa.gov/intelligent-systems-division/discovery-and-systems-health/pcoe/pcoe-data-set-repository/">C-MAPSS</a> (the classic 21-sensor turbofan RUL benchmark, 4 sub-datasets) and N-CMAPSS (2021, with real flight conditions — far more realistic degradation trajectories); mirrored at the <a href="https://data.phmsociety.org/nasa/">PHM Society repository</a>. <strong>Validates:</strong> Layer 1 synthetic telemetry realism and gives the prognostic engine a <em>public</em> benchmark — "our RUL model scores X on N-CMAPSS" is the one accuracy claim you can legitimately publish before operator data arrives, because anyone can reproduce it.</p>
+<h3>3.5 Moubray, RCM II + SAE JA1011/JA1012 <span class="paid">BOOK + STANDARDS</span></h3>
+<p>Moubray's <em>RCM II</em> (Industrial Press) turned Nowlan &amp; Heap into practice across industries; SAE JA1011/1012 define what may legitimately be called an RCM process. <strong>Validates:</strong> the failure-mode taxonomy and the scheduled-vs-condition-based decision logic in the simulator's Layer 3, in the vocabulary reliability engineers at your customers actually use.</p>
+
+<h2>4. Tier 3 — Harden and Sell</h2>
+<table>
+<tr><th>Source</th><th>What it is</th><th>What it validates for AviOS</th></tr>
+<tr><td><strong>Managing Maintenance Error</strong> — Reason &amp; Hobbs <span class="paid">BOOK</span></td><td>The human-factors classic on why maintenance goes wrong (error traps, procedural drift)</td><td>Workflow design: AviOS surfaces must reduce error opportunity, not add screens; also the safety narrative for regulators</td></tr>
+<tr><td><strong>Safety Management Systems in Aviation</strong> — Stolzer et al. <span class="paid">BOOK</span></td><td>Standard SMS text (ICAO Annex 19 world)</td><td>How AviOS risk outputs plug into an operator's existing SMS instead of competing with it</td></tr>
+<tr><td><strong>Airworthiness</strong> — De Florio <span class="paid">BOOK</span></td><td>Certification and continuing-airworthiness framework, EASA/FAA</td><td>The regulatory boundary: what AviOS may recommend vs what only approved data/organizations may decide</td></tr>
+<tr><td><strong>The Global Airline Industry</strong> — Belobaba, Odoni &amp; Barnhart <span class="paid">BOOK</span></td><td>MIT's airline-economics standard (Wiley)</td><td>Where maintenance sits in airline cost structure — the language of the C-suite you're selling to</td></tr>
+<tr><td><strong>FAA AMT Handbook</strong> (FAA-H-8083-30) <span class="free">FREE</span></td><td>The FAA's own mechanic curriculum</td><td>Ground-truth vocabulary for task cards and shop-floor workflows; free sanity check for simulator task content</td></tr>
+<tr><td><strong>MSG-3 Vol 1&amp;2 + ATA iSpec 2200 / Spec 2000</strong> — Airlines for America <span class="paid">LICENSED</span></td><td>The actual standards documents behind simulator Layer 4</td><td>Buy the licenses before shipping anything that embeds their structure — same licensing caution flagged in the simulator spec</td></tr>
+<tr><td><strong>FAA SDRS · NASA ASRS · NGAFID · BTS Form 41 (Sched. P-5.2)</strong> <span class="free">OPEN DATA</span></td><td>Service difficulty reports, safety reports, annotated GA flight data, US carrier maintenance cost filings</td><td>Failure base-rate calibration for Layer 2 and independent cost cross-checks against IATA MCX</td></tr>
+</table>
+
+<h2>5. Ongoing Media — the Standing Watch</h2>
+<ul>
+<li><strong>Aviation Week — Inside MRO</strong> magazine + the <a href="https://aviationweek.com/mro/podcast">MRO Podcast</a>: the industry's trade press of record; where operator pain points, MRO capacity moves, and competitor announcements surface first.</li>
+<li><strong>MRO Americas / MRO Europe / MRO Asia-Pacific</strong> (Aviation Week events): where every buyer, competitor, and MRO software incumbent exhibits — the annual reality check on positioning.</li>
+<li><strong>IATA MCTG</strong> (<a href="https://www.iata.org/en/programs/ops-infra/techops/mctg/">Maintenance Cost Technical Group</a>): guidelines and webinars; joining the MCX exchange later gives benchmarking depth competitors won't have.</li>
+<li><strong>ARSA</strong> annual market assessment and regulatory tracking; <strong>Skybrary</strong> as the free encyclopedic reference for any operational concept.</li>
+<li><strong>PHM Society</strong> annual conference + European conference: the technical frontier; the data challenges are recruiting grounds and benchmark opportunities.</li>
+</ul>
+
+<h2>6. Coverage Map — Library ↔ AviOS</h2>
+<table>
+<tr><th>AviOS component</th><th>Primary sources</th></tr>
+<tr><td>Simulator Layer 1 — telemetry realism</td><td>NASA C-MAPSS / N-CMAPSS · NGAFID · Kim/An/Choi</td></tr>
+<tr><td>Simulator Layer 2 — failure models &amp; base rates</td><td>Nowlan &amp; Heap · FAA SDRS · IJPHM · Moubray/JA1011</td></tr>
+<tr><td>Simulator Layer 3 — MRO ops &amp; workflows</td><td>Kinnison · Lapesa Barrera · Reason &amp; Hobbs · FAA AMT Handbook</td></tr>
+<tr><td>Simulator Layer 4 — standards &amp; regulation</td><td>MSG-3 · iSpec 2200 / Spec 2000 · Lapesa Barrera · De Florio</td></tr>
+<tr><td>Prognostic engine &amp; validation protocol</td><td>Kim/An/Choi · IVHM &lt;The Technology&gt; · IJPHM · N-CMAPSS benchmark</td></tr>
+<tr><td>ROI model &amp; pricing</td><td>IATA MCX · BTS Form 41 · IVHM &lt;Business Case&gt; · Belobaba</td></tr>
+<tr><td>Market thesis &amp; timing</td><td>Oliver Wyman 2026–2036 · IATA supply-chain analyses · ARSA · Aviation Week</td></tr>
+<tr><td>Deployment &amp; change management</td><td>IVHM &lt;Implementation and Lessons Learned&gt; · Stolzer SMS · Reason &amp; Hobbs</td></tr>
+</table>
+
+<h2>7. Suggested Sequence</h2>
+<ul>
+<li><strong>Now (free, one week):</strong> Nowlan &amp; Heap · IATA MCX FY2024 public report · Oliver Wyman 2026–2036 commentary · skim three recent IJPHM aerospace papers. This alone upgrades every conversation you have about AviOS.</li>
+<li><strong>Next (purchase, first month):</strong> Lapesa Barrera → Kinnison → IVHM <em>Business Case</em> + <em>The Technology</em>.</li>
+<li><strong>While building the simulator:</strong> Kim/An/Choi alongside Layer 2 work; download N-CMAPSS and stand up the public benchmark; SDRS pull for base-rate calibration.</li>
+<li><strong>Before first pilot conversations:</strong> IVHM <em>Implementation</em> · Reason &amp; Hobbs · license MSG-3/iSpec 2200 · subscribe Inside MRO and put one MRO conference on the calendar.</li>
+</ul>
+
+<p style="margin-top:30px; color:var(--muted); font-size:12px; border-top:1px solid #d8e0e6; padding-top:12px;">
+Position in the document set: the Simulator spec builds the platform, the Real-Data Ask spec defines the validation path, and this library is the evidence base that keeps both — and every claim made around them — grounded in the industry's own literature and numbers.</p>
+
+</body>
+</html>
