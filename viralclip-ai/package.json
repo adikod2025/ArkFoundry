@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "ai:eval": "node --experimental-strip-types src/lib/ai/evals/run.ts",
+    "ai:demo": "node --experimental-strip-types src/lib/ai/evals/demo.ts",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
