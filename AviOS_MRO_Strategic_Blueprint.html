@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AeroClip MRO — Ontology-Native Strategic Blueprint</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: {
+    primaryColor: '#0A1628', primaryTextColor: '#ffffff',
+    primaryBorderColor: '#00D4FF', lineColor: '#00D4FF',
+    fontFamily: 'Segoe UI, Helvetica, Arial, sans-serif'
+  }});
+</script>
+<style>
+  :root { --navy:#0A1628; --accent:#00D4FF; --ink:#16302B; --muted:#5b6b7a; }
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; color:#1a2530;
+         line-height:1.55; max-width:920px; margin:0 auto; padding:48px 40px; }
+  h1 { color:var(--navy); font-size:27px; margin:0 0 4px; }
+  h2 { color:var(--navy); font-size:19px; margin:34px 0 10px;
+       padding-bottom:6px; border-bottom:2px solid var(--accent); }
+  h3 { color:var(--navy); font-size:15px; margin:20px 0 6px; }
+  .subtitle { color:var(--muted); font-size:14px; margin:0 0 2px; }
+  .meta { color:var(--muted); font-size:12px; margin:0 0 8px; }
+  .callout { background:#f2f8fb; border-left:4px solid var(--accent);
+             padding:12px 16px; margin:14px 0; font-size:14px; border-radius:3px; }
+  .warn { background:#fff6f2; border-left:4px solid #ff7a59; }
+  .good { background:#f1faf4; border-left:4px solid #16a34a; }
+  table { width:100%; border-collapse:collapse; margin:14px 0; font-size:13px; }
+  th { background:var(--navy); color:#fff; text-align:left; padding:8px 10px; }
+  td { border:1px solid #d8e0e6; padding:8px 10px; vertical-align:top; }
+  tr:nth-child(even) td { background:#f7fafc; }
+  code, pre { font-family:'SF Mono', Consolas, monospace; }
+  pre { background:var(--navy); color:#e6f6fb; padding:16px; border-radius:5px;
+        font-size:12px; overflow-x:auto; line-height:1.45; }
+  code { background:#eef3f6; color:var(--ink); padding:1px 5px; border-radius:3px; font-size:12px; }
+  .diagram { text-align:center; margin:18px 0; overflow-x:auto; }
+  ul { margin:8px 0; padding-left:22px; } li { margin:4px 0; }
+  a { color:#0077a8; }
+  .tag { display:inline-block; background:var(--accent); color:var(--navy);
+         font-size:11px; font-weight:600; padding:2px 8px; border-radius:10px; }
+  .vd { display:inline-block; font-size:10px; font-weight:700; padding:1px 6px;
+        border-radius:9px; vertical-align:middle; }
+  .vd-des { background:#16a34a; color:#fff; }
+  .vd-mkt { background:#0077a8; color:#fff; }
+  .vd-pred { background:#b45309; color:#fff; }
+  @media print {
+    body { padding:0 12px; max-width:none; }
+    h2 { page-break-after:avoid; } table, pre, .callout { page-break-inside:avoid; }
+    .diagram { page-break-inside:avoid; } a { color:#0077a8; text-decoration:none; }
+  }
+</style>
+</head>
+<body>
+
+<h1>AeroClip MRO — Ontology-Native Strategic Blueprint</h1>
+<p class="subtitle">A world-class MRO enterprise built on a Palantir-style operational ontology, powered by AviOS</p>
+<p class="meta"><span class="tag">STRATEGIC BLUEPRINT</span> &nbsp; Benchmarks: ATS Everett (Seattle) · Saudia Technic MRO Village (Jeddah) &nbsp;·&nbsp; 2026</p>
+
+<div class="callout"><strong>Validity labels used throughout:</strong>
+<span class="vd vd-des">DESIGN</span> architecture matches industry practice ·
+<span class="vd vd-mkt">MARKET</span> independently documented spend/pain ·
+<span class="vd vd-pred">PREDICTIVE</span> requires observed results on operator data (pending pilot). Every strong claim below carries the label it has earned — nothing is presented as proven that isn't.</div>
+
+<h2>1. Thesis — the competition has moved from the hangar to the operating system</h2>
+<p>World-class MRO today is defined by physical plant and capability breadth. <a href="https://www.atsmro.com/">Aviation Technical Services</a> (Everett, WA — the Seattle benchmark) runs 1.2M+ ft² of airframe, component, modification and paint capability and was Aviation Week's 2016 Independent MRO of the Year. <a href="https://www.saudiatechnic.com/">Saudia Technic</a>'s new <a href="https://www.pif.gov.sa/en/news-and-insights/press-releases/2023/pif-invests-in-saudia-technic-to-establish-a-national-mro-champion-in-the-aviation-sector/">PIF-backed MRO Village</a> in Jeddah is a ~1M&nbsp;m² (10.7M&nbsp;ft²) build with up to 11 hangars, four widebody bays simultaneously, and a Jet Propulsion Center test cell rated to 150,000&nbsp;lbf. These are the right benchmarks for scale and capability.</p>
+<p>But both — and every incumbent — still <em>run</em> on transactional systems-of-record (AMOS, TRAX, OASES) surrounded by spreadsheets, email, and tribal knowledge. The four numbers that decide MRO profitability — <strong>turnaround time, hangar yield, AOG hours, and inventory turns</strong> — are all governed by <em>decisions made against a stale model of reality</em>. <span class="vd vd-des">DESIGN</span> The next-generation MRO does not win with more square footage; it wins with a superior operating system: a live <strong>operational ontology</strong> in which every tail, part, technician, bay, and defect is an object with its decisions attached, and where <strong>AviOS prediction</strong> turns unscheduled events into scheduled ones. The physical plant is table stakes; <strong>the ontology is the moat.</strong></p>
+
+<h2>2. What "world-class" looks like — and the gap it leaves open</h2>
+<table>
+<tr><th>Dimension</th><th>ATS Everett (Seattle)</th><th>Saudia Technic Village (Jeddah)</th><th>The gap AeroClip attacks</th></tr>
+<tr><td>Scale / plant</td><td>1.2M+ ft², Everett + Moses Lake + KC + Fort Worth</td><td>~1M m², up to 11 hangars, 4 widebody bays</td><td>Not plant — both are excellent. The operating system on top of it.</td></tr>
+<tr><td>Capability breadth</td><td>Airframe, components, mods, engineering, paint</td><td>Base, line, engine (JPC), component, national-champion mandate</td><td>Cross-capability <em>decisioning</em> — one live model spanning all segments</td></tr>
+<tr><td>Segments</td><td>Independent third-party heavy/airframe leader</td><td>Base + line + engine + component, vertically integrated</td><td>Same segments, run against prediction instead of schedules</td></tr>
+<tr><td>Operating system</td><td>System-of-record + human coordination</td><td>System-of-record + human coordination</td><td><strong>Ontology-native ops</strong> — the whole thesis</td></tr>
+</table>
+<div class="callout"><strong>Read this correctly:</strong> the benchmark is not "out-hangar Jeddah" — that is a multi-billion-dollar, decade-long capital race. It is "out-<em>operate</em> everyone" by making the operating system a durable advantage that compounds with every fleet added. A mid-size Part-145 MRO running an ontology-native OS can beat a larger one on TAT and AOG the way a smaller airline with better revenue management beats a larger one on load factor.</div>
+
+<h2>3. The Palantir framework, applied to MRO</h2>
+<p>Palantir's operating model centres on the <a href="https://www.palantir.com/docs/foundry/ontology/overview">Ontology</a>: a layer that connects integrated data to its real-world counterparts and pairs <strong>semantic elements</strong> (objects, properties, links) with <strong>kinetic elements</strong> (actions, functions, security) to "close the loop between AI/ML and operations." We adopt that framework wholesale — with one deliberate exception. Palantir markets its ontology as "a digital twin of an organization." <strong>AeroClip/AviOS does not use "digital twin"</strong> (it over-promises physical fidelity we don't claim); we say <em>operational ontology</em>. The distinction is the same one drawn in the AviOS Simulator spec.</p>
+
+<div class="diagram">
+<pre class="mermaid">
+flowchart TB
+    subgraph SRC["DATA INTEGRATION (Foundry-style pipelines)"]
+        S1["System of record
+        AMOS / TRAX / OASES"]
+        S2["Sensors / ACMS
+        (ATA 45 fault msgs)"]
+        S3["Parts & supply
+        (Spec 2000 / BOM)"]
+        S4["Records / logs
+        PIREP · MAREP · AD"]
+    end
+    subgraph SEM["SEMANTIC LAYER — objects · properties · links"]
+        O1["Aircraft (tail)
+        hours · cycles · status"]
+        O2["Component (serial, LLP)
+        TSN/CSN · life-limit rem · health · RUL"]
+        O3["WorkOrder / MaintenanceEvent
+        MSG-3 task · FEC · start/end"]
+        O4["Defect (PIREP/MAREP)
+        ATA · MEL cat A/B/C/D"]
+        O5["HangarBay · TechnicianShift
+        (certifications) · Part (lead-time)"]
+    end
+    subgraph KIN["KINETIC LAYER — actions & decisions (permissioned, logged)"]
+        K1["Package tasks → check"]
+        K2["Assign tech to task
+        (by certification)"]
+        K3["Pre-position part
+        (RUL-driven)"]
+        K4["Defer defect
+        (within MEL limit)"]
+        K5["Release to service
+        ⟵ CAMO / Part-145 ONLY"]
+    end
+    AV["AVIOS PREDICTION
+    prognostic engine (RUL, health)
+    + simulator (pre-train, calibrate)"]
+    AIP["AGENT ASSIST (AIP)
+    draft work-package · flag AOG risk
+    — human-in-loop, never airworthiness"]
+    WB["WRITE-BACK → world
+    provisioning · plan · shop floor"]
+    OUT["OUTCOMES
+    actual removal · actual TAT · AOG hrs"]
+    S1 --> SEM
+    S2 --> SEM
+    S3 --> SEM
+    S4 --> SEM
+    AV -->|"populates health / RUL properties"| O2
+    SEM --> KIN
+    AIP -.->|proposes, human approves| KIN
+    K1 --> WB
+    K2 --> WB
+    K3 --> WB
+    K4 --> WB
+    WB --> OUT
+    OUT -->|"feeds calibration & learning"| AV
+    OUT -->|"updates objects"| SEM
+    K5 -.->|human decision, logged| SEM
+</pre>
+</div>
+
+<h3>3.1 Semantic layer — the objects (mapped to the AviOS entity model)</h3>
+<p>The ontology's core objects <em>are</em> the AviOS canonical entities (Simulator spec §6), which keeps the strategic model and the product one-to-one:</p>
+<ul>
+<li><strong>Aircraft (tail)</strong> — type/series, cumulative hours/cycles, status.</li>
+<li><strong>Component (serial, LLP)</strong> — installed serial, ATA chapter, TSN/CSN/TSO, life-limit remaining, and the AviOS-populated <em>health index</em> and <em>RUL</em> properties.</li>
+<li><strong>WorkOrder / MaintenanceEvent</strong> — MSG-3 task, Failure Effect Category (5 evident-safety … 9 hidden-non-safety), start/end, parts consumed.</li>
+<li><strong>Defect</strong> — PIREP/MAREP source, ATA chapter, MEL rectification category (A per-interval, B 3 days, C 10 days, D 120 days — calendar-based), resolving event.</li>
+<li><strong>Resource objects</strong> — HangarBay, TechnicianShift (with certifications), Part (rotable/consumable, BOM, supplier lead-time) — the <em>finite resources</em> the Simulator's Layer 3 DES already models.</li>
+<li><strong>Constraint objects</strong> — AirworthinessDirective (mandatory, non-deferrable deadline), regulatory rule (Part-145 / Part-CAMO / Part 43).</li>
+</ul>
+<p><strong>Links</strong> encode the physics: <code>installed-on</code>, <code>deferred-under-MEL</code>, <code>requires-part</code>, <code>assigned-to-bay</code>, <code>performed-by-tech</code>, <code>superseded-by-AD</code>, <code>escalates-to-check</code>. A rotable's serial moves between tails over its life — the link history <em>is</em> its provenance.</p>
+
+<h3>3.2 Kinetic layer — the decisions (where value is actually created)</h3>
+<p>Objects are nouns; decisions are verbs. Each action is permissioned, logged, and reversible — and one is hard-walled: <span class="vd vd-des">DESIGN</span> <strong>release-to-service is a CAMO / Part-145 human decision only.</strong> AviOS recommends and predicts; it never certifies, releases, or defers a defect on its own authority. That boundary is what keeps the system sellable to a regulator.</p>
+
+<h3>3.3 Where AviOS plugs in — the blueprint reuses the specs you already have</h3>
+<div class="good callout"><strong>The three canonical AviOS documents are not separate from this blueprint — they are its build spec:</strong>
+<ul>
+<li>The <strong>Simulator</strong> pre-trains and hardens the ontology's prediction functions before any real data exists (de-risking cold-start).</li>
+<li>The <strong>prognostic engine</strong> populates the Component object's health/RUL properties that the kinetic layer acts on.</li>
+<li>The <strong>Minimal Real-Data Ask</strong> extract (five tables) <em>is</em> the ontology's initial data-integration payload — its tables map straight onto Aircraft, Component, MaintenanceEvent, Defect. The temporal-holdout validation protocol is how the prediction functions earn <span class="vd vd-pred">PREDICTIVE</span> status.</li>
+</ul></div>
+
+<h2>4. The capability stack</h2>
+<h3>4.1 Physical (the certified MRO — table stakes, capital-heavy)</h3>
+<p>Base maintenance (heavy C/D checks), line maintenance, engine shop (à la Jeddah's JPC), component backshops by ATA chapter, paint & modification, and parts logistics. Capability is declared in the Part-145 <em>capability list</em> by ATA chapter — real chapters only (e.g. 27 flight controls, 29 hydraulics, 32 landing gear, 49 APU, 71–80 powerplant). <span class="vd vd-des">DESIGN</span></p>
+
+<h3>4.2 Digital (the operating system — the differentiator)</h3>
+<p>Data integration → operational ontology → AviOS prediction → decision apps → write-back → outcomes → learning. This is the loop in §3, and it is where the compounding advantage lives.</p>
+
+<h3>4.3 Organizational (the M&amp;E functions as ontology operators)</h3>
+<table>
+<tr><th>M&E function</th><th>Objects owned</th><th>Kinetic actions</th></tr>
+<tr><td>Maintenance Control (day-of-ops)</td><td>Aircraft, Defect, AOG event</td><td>defer within MEL, dispatch decision, escalate</td></tr>
+<tr><td>Planning</td><td>WorkOrder, HangarBay</td><td>package tasks → check, sequence bays (hangar yield)</td></tr>
+<tr><td>Reliability Engineering <em>(natural champion)</em></td><td>Component, failure rates</td><td>set alert levels, escalate program, approve prediction thresholds</td></tr>
+<tr><td>Materiel</td><td>Part, Supplier</td><td>pre-position (RUL-driven), provision, AOG-risk flag</td></tr>
+<tr><td>Quality / Records</td><td>all — provenance</td><td>audit, sign-off routing, AD compliance tracking</td></tr>
+</table>
+
+<h2>5. Value creation — the four P&amp;L levers</h2>
+<p>Ontology-native operations move each of the four numbers that decide MRO profitability. The <em>mechanism</em> is <span class="vd vd-des">DESIGN</span>-valid; the <em>cost baselines</em> are <span class="vd vd-mkt">MARKET</span>-valid (IATA MCX); the <em>improvement magnitude</em> is <span class="vd vd-pred">PREDICTIVE</span> and is not asserted here as a number until pilot data proves it.</p>
+<table>
+<tr><th>Lever</th><th>Legacy failure mode</th><th>Ontology-native mechanism</th></tr>
+<tr><td><strong>Turnaround time (TAT)</strong></td><td>AOG-for-parts holds discovered mid-check</td><td>RUL-driven parts staged before induction; findings predicted → fewer surprises → more checks/bay/year (hangar yield)</td></tr>
+<tr><td><strong>AOG hours</strong></td><td>Unscheduled removals, no rotable on shelf</td><td>Prediction shifts unscheduled→scheduled; pre-positioned rotables shrink the AOG-for-parts tail</td></tr>
+<tr><td><strong>Inventory turns</strong></td><td>Min/max reorder ties capital in slow rotables</td><td>RUL-driven provisioning holds the <em>right</em> part, not the <em>average</em> part</td></tr>
+<tr><td><strong>Labor productivity</strong></td><td>NFF chases; wrong-certification reassignments</td><td>Right tech→right task by certification link; NFF modeled, not chased blindly</td></tr>
+</table>
+<div class="warn callout"><strong>AOG cost is the operator's input, never our assertion.</strong> Quoted day-rates range from ~$10k (narrowbody, minor) to $150k+ (widebody, revenue loss included) with no single authoritative figure — so in any ROI model AOG cost is a customer-supplied variable with cited ranges as defaults. <span class="vd vd-mkt">MARKET</span> The macro tailwind is real and documented: MRO spend surpassed <strong>$136B in 2025</strong>, fleet age hit <strong>13.4 years</strong>, and supply-chain constraints added <strong>$3.1B</strong> of maintenance cost — an aging, parts-starved fleet is exactly the market where prediction and pre-positioning are worth the most (Oliver Wyman; IATA).</div>
+
+<h2>6. Phased build — crawl, walk, run</h2>
+<table>
+<tr><th>Phase</th><th>What ships</th><th>Proof point</th></tr>
+<tr><td><strong>0 — Semantic</strong></td><td>Ontology over one homogeneous sub-fleet's system-of-record + records (read-only; the Real-Data Ask extract is the ingestion payload)</td><td>Live objects + a fleet reliability insight report — value before any prediction</td></tr>
+<tr><td><strong>1 — Predictive</strong></td><td>AviOS prognostic on that sub-fleet in <em>shadow mode</em>; first kinetic action (parts pre-position <em>recommendation</em>), human-approved</td><td>Temporal-holdout validation: alerts vs actual removals, precision/recall vs the MSG-3 baseline. This is where prediction earns <span class="vd vd-pred">PREDICTIVE</span> status.</td></tr>
+<tr><td><strong>2 — Kinetic</strong></td><td>Close the loop on materiel + planning (write-back to provisioning and check packaging); expand fleets</td><td>Measured TAT / inventory-turn movement on a real line</td></tr>
+<tr><td><strong>3 — Scale</strong></td><td>Full base/line/engine/component coverage; agent assist (AIP); multi-site</td><td>Ontology-native OS as the house standard across the MRO</td></tr>
+</table>
+<p><span class="vd vd-des">DESIGN</span> Airworthiness decisions remain human/CAMO at every phase. The build earns trust by starting read-only and advisory, then closing loops only where outcomes have validated the prediction.</p>
+
+<h2>7. Moat &amp; positioning</h2>
+<ul>
+<li><strong>vs systems-of-record (AMOS / TRAX / OASES):</strong> they are transactional ledgers; the ontology is the <em>decision layer above them</em>. Integrate, don't replace — the Real-Data Ask extract tables double as the integration surface.</li>
+<li><strong>vs Palantir Foundry itself:</strong> Foundry is horizontal. This is a <em>vertical</em> MRO ontology with aviation prediction and Part-145/CAMO guardrails baked in — the domain knowledge (MSG-3, ATA, MEL, RCM) is the moat, and it already lives in the AviOS skills.</li>
+<li><strong>vs OEM prognostics (GE, Rolls-Royce):</strong> an OEM sees only its own engines. The MRO ontology sees the <em>whole tail</em> across every system, OEM, and supplier — the cross-ATA, cross-vendor view no single OEM can hold.</li>
+<li><strong>The flywheel:</strong> more fleets → better base-rate calibration → better prediction → more fleets. <span class="vd vd-des">DESIGN</span></li>
+</ul>
+
+<h2>8. Honesty boundary (the same discipline as every AviOS document)</h2>
+<div class="warn callout">
+<ul>
+<li><strong>Have now</strong> <span class="vd vd-des">DESIGN</span> <span class="vd vd-mkt">MARKET</span>: an architecture that matches how MRO actually works, and a documented, growing market with a real tailwind.</li>
+<li><strong>Do not have until pilot</strong> <span class="vd vd-pred">PREDICTIVE</span>: observed precision on an operator's real history, and therefore any specific % improvement in TAT, AOG, or inventory. The Real-Data Ask protocol is the only path to it.</li>
+<li><strong>The physical MRO is real capital and real regulation.</strong> The software advantage rides <em>on top of</em> a certified Part-145 organization with a capability list and approved data — it does not bypass certification, and the buildout (hangars, backshops, engine test) is a genuine multi-year capital program, as Jeddah's own scale shows.</li>
+<li><strong>Licensing:</strong> MSG-3, iSpec 2200, and Spec 2000 are licensed A4A documents — the ontology encodes their <em>structure and logic</em>, never their text; licenses are purchased before any of it ships.</li>
+</ul>
+</div>
+
+<p style="margin-top:30px; color:var(--muted); font-size:12px; border-top:1px solid #d8e0e6; padding-top:12px;">
+Position in the AviOS document set: the Simulator spec builds the prediction platform, the Real-Data Ask spec defines the validation path and the ontology's first data payload, the Research Library is the evidence base — and this blueprint is the enterprise those three assemble into: an ontology-native MRO benchmarked to the best in Seattle and Jeddah, whose durable advantage is its operating system, not its square footage. Sources: <a href="https://www.atsmro.com/">ATS</a> · <a href="https://www.flightglobal.com/mro/saudia-technic-secures-public-investment-to-develop-extensive-mro-facility/156289.article">Flight Global / Saudia Technic</a> · <a href="https://www.pif.gov.sa/en/news-and-insights/press-releases/2023/pif-invests-in-saudia-technic-to-establish-a-national-mro-champion-in-the-aviation-sector/">PIF</a> · <a href="https://www.palantir.com/docs/foundry/ontology/overview">Palantir Ontology docs</a>.</p>
+
+</body>
+</html>
